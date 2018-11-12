@@ -9,6 +9,7 @@ namespace Yo
     {
         protected string m_connectionString;
         protected string m_schema_table;
+        protected DataTable m_dataTable;
 
         public string Message { get; set; }
 
@@ -29,25 +30,30 @@ namespace Yo
             m_connectionString += m_schema_table;
         }
 
-        public bool fill(string sql, Action<DataSet> act) {
+        public bool getData(string sql) {
             var result = false;
             while (true) {
                 if (string.IsNullOrEmpty(sql)) {
                     break; ;
                 }
 
-                if (act == null) {
-                    break; ;
-                }
-
                 try {
+                    var ds = new DataSet();
                     using (var conn = new MySqlConnection(m_connectionString)) {
                         var cmd = new MySqlCommand(sql, conn);
                         var da = new MySqlDataAdapter(cmd);
-                        var ds = new DataSet();
                         da.Fill(ds);
-                        act(ds);
                     }
+
+                    if (ds == null) {
+                        break;
+                    }
+
+                    if (ds.Tables.Count == 0) {
+                        break;
+                    }
+
+                    m_dataTable = ds.Tables[0];
                     result = true;
                 }
                 catch (MySqlException e) {

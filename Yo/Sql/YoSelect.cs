@@ -10,9 +10,9 @@ namespace Yo
             DataView view = null;
             var sql = string.Format("SELECT * FROM `{0}`;", m_table);
 
-            fill(sql, ds => {
-                view = YoSqlHelper.GetView(ds);
-            });
+            if (getData(sql)) {
+                view = YoSqlHelper.GetView(m_dataTable);
+            }
             return view;
         }
 
@@ -20,9 +20,9 @@ namespace Yo
             DataRowCollection rows = null;
             var sql = string.Format("SELECT * FROM `{0}`;", m_table);
 
-            fill(sql, ds => {
-                rows = YoSqlHelper.GetRows(ds);
-            });
+            if (getData(sql)) {
+                rows = YoSqlHelper.GetRows(m_dataTable);
+            }
             return rows;
         }
 

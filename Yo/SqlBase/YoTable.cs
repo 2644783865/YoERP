@@ -10,9 +10,9 @@ namespace Yo
             var sql = string.Format("SELECT {0}, {1}, {2} FROM information_schema.tables WHERE table_schema='{3}';",
                 yo_table.name, yo_table.rows, yo_table.comment, m_schema_table);
 
-            fill(sql, ds => {
-                dict = YoSqlHelper.Dataset2Dict<yo_table>(ds, yo_table.name);
-            });
+            if (getData(sql)) {
+                dict = YoSqlHelper.Datatable2Dict<yo_table>(m_dataTable, yo_table.name);
+            }
 
             return dict;
         }

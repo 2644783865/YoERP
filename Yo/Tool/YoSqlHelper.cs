@@ -6,18 +6,14 @@ namespace Yo
 {
     public class YoSqlHelper
     {
-        static public DataRowCollection GetRows(DataSet ds) {
+        static public DataRowCollection GetRows(DataTable dt) {
             DataRowCollection rows = null;
             while (true) {
-                if (ds == null) {
+                if (dt == null) {
                     break;
                 }
 
-                if (ds.Tables.Count == 0) {
-                    break;
-                }
-
-                var temp = ds.Tables[0].Rows;
+                var temp = dt.Rows;
                 if (temp.Count == 0) {
                     break;
                 }
@@ -28,18 +24,14 @@ namespace Yo
             return rows;
         }
 
-        static public DataView GetView(DataSet ds) {
+        static public DataView GetView(DataTable dt) {
             DataView view = null;
             while (true) {
-                if (ds == null) {
+                if (dt == null) {
                     break;
                 }
 
-                if (ds.Tables.Count == 0) {
-                    break;
-                }
-
-                var temp = ds.Tables[0].DefaultView;
+                var temp = dt.DefaultView;
                 if (temp.Count == 0) {
                     break;
                 }
@@ -70,10 +62,10 @@ namespace Yo
             }
         }
 
-        static public Dictionary<string, T> Dataset2Dict<T>(DataSet ds, string key) {
+        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key) {
             var dict = new Dictionary<string, T>();
             while (true) {
-                var rows = GetRows(ds);
+                var rows = GetRows(dt);
                 if (rows == null) {
                     break;
                 }
