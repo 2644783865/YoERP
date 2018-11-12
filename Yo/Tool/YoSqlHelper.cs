@@ -62,7 +62,7 @@ namespace Yo
             }
         }
 
-        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key) {
+        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<DataRow, object> func = null, string display = "display") {
             var dict = new Dictionary<string, T>();
             while (true) {
                 var rows = GetRows(dt);
@@ -82,7 +82,19 @@ namespace Yo
 
                     foreach (var property in propertyList) {
                         var name = property.Name;
-                        property.SetValue(item, row[name]);
+                        object value = null;
+
+                        if (name == display) {
+                            if (func == null) {
+                                continue;
+                            }
+                            value = func(row);
+                        }
+                        else {
+                            value = row[name];
+                        }
+                        property.SetValue(item, value);
+
                         if (name == key) {
                             dict.Add(row[name].ToString(), item);
                         }

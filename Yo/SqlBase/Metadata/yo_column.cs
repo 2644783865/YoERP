@@ -11,5 +11,7 @@
         public string data_type { get; set; }
         public string column_type { get; set; }
         public string column_comment { get; set; }
+
+        public string display { get; set; }
     }
 }
