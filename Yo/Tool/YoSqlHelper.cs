@@ -105,5 +105,13 @@ namespace Yo
             return dict;
         }
 
+        static public bool IsRelation(string key) {
+            return key.EndsWith("_id");
+        }
+
+        static public string GetRelationTable(string key) {
+            return key.Replace("_id", "");
+        }
+
     }
 }

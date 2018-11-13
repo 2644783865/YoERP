@@ -12,6 +12,7 @@ namespace Yo
         protected DataTable m_dataTable;
 
         public string Message { get; set; }
+        public DataTable DataTable { get { return m_dataTable; } }
 
         public YoConnect() {
             string schema_table = nameof(schema_table);
@@ -33,6 +34,8 @@ namespace Yo
         public bool getData(string sql) {
             var result = false;
             while (true) {
+                disposeDataTable();
+
                 if (string.IsNullOrEmpty(sql)) {
                     break; ;
                 }
@@ -65,6 +68,13 @@ namespace Yo
             }
 
             return result;
+        }
+
+        void disposeDataTable() {
+            if (m_dataTable != null) {
+                m_dataTable.Dispose();
+                m_dataTable = null;
+            }
         }
 
     }
