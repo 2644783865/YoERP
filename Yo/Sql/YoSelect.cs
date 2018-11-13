@@ -13,21 +13,32 @@ namespace Yo
             return this;
         }
 
-        public string GetDisplay(object id) {
+        public string GetDisplay(object id, bool isRow = false) {
             string result = "";
             while (true) {
-                var sql = string.Format("SELECT * FROM `{0}` WHERE id={1} limit 1;", m_table, id);
+                DataRow row = null;
+                if (isRow) {
+                    row = id as DataRow;
+                }
+                else {
+                    var sql = string.Format("SELECT * FROM `{0}` WHERE id={1} limit 1;", m_table, id);
 
-                if (!getData(sql)) {
+                    if (!getData(sql)) {
+                        break;
+                    }
+
+                    var rows = YoSqlHelper.GetRows(m_dataTable);
+                    if (rows == null) {
+                        break;
+                    }
+
+                    row = rows[0];
+                }
+
+                if(row == null) {
                     break;
                 }
 
-                var rows = YoSqlHelper.GetRows(m_dataTable);
-                if(rows == null) {
-                    break;
-                }
-
-                var row = rows[0];
                 var format = (new YoTable()).GetComment(m_table) as string;
 
                 if (!string.IsNullOrEmpty(format)) {
@@ -95,6 +106,27 @@ namespace Yo
             }
 
             return displayTable;
+        }
+
+        public List<yo_ui_row> GetUIRows() {
+            var uiRowList = new List<yo_ui_row>();
+            while (true) {
+                if (m_dataTable == null) {
+                    break;
+                }
+                
+                foreach (DataRow row in m_dataTable.Rows) {
+                    var uiRow = new yo_ui_row();
+                    uiRowList.Add(uiRow);
+
+                    uiRow.value = row[ID];
+                    uiRow.valueDisplay = GetDisplay(row, true);
+                }
+
+                break;
+            }
+
+            return uiRowList;
         }
 
     }

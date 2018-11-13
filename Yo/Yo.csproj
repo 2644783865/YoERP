@@ -52,11 +52,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="JCore\FileHelper.cs" />
+    <Compile Include="SqlBase\Metadata\yo_ui_column.cs" />
     <Compile Include="SqlBase\Metadata\yo_table.cs" />
     <Compile Include="SqlBase\Metadata\yo_column.cs" />
+    <Compile Include="SqlBase\Metadata\yo_ui_row.cs" />
     <Compile Include="SqlBase\YoColumn.cs" />
     <Compile Include="SqlBase\YoSQL.cs" />
     <Compile Include="Sql\YoInsert.cs" />
+    <Compile Include="Sql\YoSelectOne.cs" />
     <Compile Include="Sql\YoUpdate.cs" />
     <Compile Include="Sql\YoSelect.cs" />
     <Compile Include="SqlBase\YoTable.cs" />
