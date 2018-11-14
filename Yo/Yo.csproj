@@ -55,6 +55,7 @@
     <Compile Include="SqlBase\Metadata\yo_ui_column.cs" />
     <Compile Include="SqlBase\Metadata\yo_table.cs" />
     <Compile Include="SqlBase\Metadata\yo_column.cs" />
+    <Compile Include="SqlBase\Metadata\DataType.cs" />
     <Compile Include="SqlBase\Metadata\yo_ui_row.cs" />
     <Compile Include="SqlBase\YoColumn.cs" />
     <Compile Include="SqlBase\YoSQL.cs" />

@@ -9,7 +9,7 @@ namespace Yo
 
         public YoUpdate(string table) : base(table) { }
 
-        public bool Update(Dictionary<string, string> dict) {
+        public bool Update(Dictionary<string, object> dict) {
             var result = false;
             while (true) {
                 if (dict == null) {
@@ -46,29 +46,50 @@ namespace Yo
             return result;
         }
 
-
-        public bool parseSqlSet(Dictionary<string, string> dict) {
-            if(dict == null) {
-                return false;
-            }
-
-            m_listSqlSet = new List<string>();
-            YoSqlHelper.EachColumn(ColumnDict, (key, val) => {
-                while (true) {
-                    if (key == ID) {
-                        break;
-                    }
-
-                    if (!dict.ContainsKey(key)) {
-                        break;
-                    }
-
-                    var temp = string.Format(" `{0}`='{1}' ", key, dict[key]);
-                    m_listSqlSet.Add(temp);
+        public bool parseSqlSet(Dictionary<string, object> dict) {
+            bool result = false;
+            while (true) {
+                if (dict == null) {
                     break;
                 }
-            });
-            return m_listSqlSet.Count > 0;
+
+                ErrorList = new Dictionary<string, object>();
+                m_listSqlSet = new List<string>();
+
+                YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
+                    while (true) {
+                        if (key == ID) {
+                            break;
+                        }
+
+                        if (!dict.ContainsKey(key)) {
+                            break;
+                        }
+
+                        var value = dict[key];
+                        if(!ui2db(key, ref value, column.data_type)) {
+                            ErrorList.Add(key, value);
+                            break;
+                        }
+
+                        var temp = string.Format(" `{0}`='{1}' ", key, value);
+                        m_listSqlSet.Add(temp);
+                        break;
+                    }
+                });
+
+                if(ErrorList.Count > 0) {
+                    break;
+                }
+
+                if (m_listSqlSet.Count == 0) {
+                    break;
+                }
+
+                result = true;
+                break;
+            }
+            return result;
         }
 
     }

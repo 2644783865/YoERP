@@ -10,7 +10,7 @@ namespace Yo
 
         public YoInsert(string table) : base(table) { }
 
-        public bool Insert(Dictionary<string, string> dict) {
+        public bool Insert(Dictionary<string, object> dict) {
             var result = false;
             while (true) {
                 if (dict == null) {
@@ -46,34 +46,51 @@ namespace Yo
             return result;
         }
 
-        public bool parseSqlValues(Dictionary<string, string> dict) {
-            if (dict == null) {
-                return false;
-            }
-
-            m_listSqlColumn = new List<string>();
-            m_listSqlValue = new List<string>();
-            YoSqlHelper.EachColumn(ColumnDict, (key, val) => {
-                while (true) {
-                    if (key == ID) {
-                        break;
-                    }
-
-                    if (!dict.ContainsKey(key)) {
-                        break;
-                    }
-
-                    var value = dict[key];
-                    if (string.IsNullOrEmpty(value)) {
-                        break;
-                    }
-
-                    m_listSqlColumn.Add(string.Format("`{0}`", key));
-                    m_listSqlValue.Add(string.Format("'{0}'", value));
+        public bool parseSqlValues(Dictionary<string, object> dict) {
+            bool result = false;
+            while (true) {
+                if (dict == null) {
                     break;
                 }
-            });
-            return m_listSqlValue.Count > 0;
+
+                ErrorList = new Dictionary<string, object>();
+                m_listSqlColumn = new List<string>();
+                m_listSqlValue = new List<string>();
+
+                YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
+                    while (true) {
+                        if (key == ID) {
+                            break;
+                        }
+
+                        if (!dict.ContainsKey(key)) {
+                            break;
+                        }
+
+                        var value = dict[key];
+                        if (!ui2db(key, ref value, column.data_type)) {
+                            ErrorList.Add(key, value);
+                            break;
+                        }
+
+                        m_listSqlColumn.Add(string.Format("`{0}`", key));
+                        m_listSqlValue.Add(string.Format("'{0}'", value));
+                        break;
+                    }
+                });
+
+                if (ErrorList.Count > 0) {
+                    break;
+                }
+
+                if (m_listSqlValue.Count == 0) {
+                    break;
+                }
+
+                result = true;
+                break;
+            }
+            return result;
         }
 
     }

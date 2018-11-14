@@ -26,6 +26,70 @@ namespace Yo
             return result;
         }
 
+        static public bool ParseInt(ref object value) {
+            bool result = true;
+            while (true) {
+                if(value is string) {
+                    if(string.IsNullOrWhiteSpace(value as string)) {
+                        value = 0;
+                        break;
+                    }
+                }
+
+                try {
+                    value = Convert.ToInt32(value);
+                }
+                catch {
+                    result = false;
+                }
+
+                break;
+            }
+            return result;
+        }
+
+        static public bool ParseDouble(ref object value) {
+            bool result = true;
+            while (true) {
+                if (value is string) {
+                    if (string.IsNullOrWhiteSpace(value as string)) {
+                        value = 0;
+                        break;
+                    }
+                }
+
+                try {
+                    value = Convert.ToDouble(value);
+                }
+                catch {
+                    result = false;
+                }
+
+                break;
+            }
+            return result;
+        }
+
+        static public bool ParseString(ref object value) {
+            bool result = true;
+            while (true) {
+                if (value == null) {
+                    value = "";
+                    break;
+                }
+
+                try {
+                    value = value.ToString().Trim();
+                }
+                catch {
+                    result = false;
+                }
+
+                break;
+            }
+            return result;
+        }
+
     }
 
 }
