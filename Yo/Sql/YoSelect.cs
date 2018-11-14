@@ -40,7 +40,7 @@ namespace Yo
                 }
 
                 var comment = (new YoTable()).GetComment(m_table);
-                var formatObject = ConfigHelper.GetValue(comment, table_display);
+                var formatObject = ConfigHelper.GetValue(comment, ROW_TITLE);
                 var format = formatObject == null ? null : formatObject.ToString();
 
                 if (!string.IsNullOrEmpty(format)) {
@@ -85,21 +85,21 @@ namespace Yo
 
                 displayTable = new DataTable();
                 YoSqlHelper.EachColumn(ColumnDict, (key, val) => {
-                    displayTable.Columns.Add(new DataColumn(key, typeof(string)));
+                    displayTable.Columns.Add(new DataColumn(key, typeof(object)));
                 });
 
                 foreach (DataRow row in m_dataTable.Rows) {
                     var rowNew = displayTable.NewRow();
                     displayTable.Rows.Add(rowNew);
 
-                    YoSqlHelper.EachColumn(ColumnDict, (key, val) => {
+                    YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
                         if (YoSqlHelper.IsRelation(key)) {
                             var table = YoSqlHelper.GetRelationTable(key);
                             var select = new YoSelect(table);
                             rowNew[key] = select.GetDisplay(row[key]);
                         }
                         else {
-                            rowNew[key] = row[key].ToString();
+                            rowNew[key] = db2ui(row[key], column);
                         }
                     });
                 }

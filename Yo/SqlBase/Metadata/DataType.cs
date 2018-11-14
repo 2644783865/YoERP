@@ -5,5 +5,6 @@
         public const string Number = "double";
         public const string Text = "varchar";
         public const string Identity = "int";
+        public const string Datetime = "datetime";
     }
 }

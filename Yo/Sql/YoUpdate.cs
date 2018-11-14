@@ -67,7 +67,7 @@ namespace Yo
                         }
 
                         var value = dict[key];
-                        if(!ui2db(key, ref value, column.data_type)) {
+                        if(!ui2db(ref value, column)) {
                             ErrorList.Add(key, value);
                             break;
                         }

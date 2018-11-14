@@ -8,7 +8,8 @@ namespace Yo
     public class YoSQL : YoConnect
     {
         protected const string ID = "id";
-        protected const string table_display = "display";
+        protected const string ROW_TITLE = "title";
+        protected const string FORMAT = "format";
 
         protected string m_table;
         public Dictionary<string, yo_column> ColumnDict;
@@ -20,9 +21,9 @@ namespace Yo
             ColumnDict = obj.GetColumns(m_table);
         }
 
-        public bool ui2db(string key, ref object value, string dataType) {
+        public bool ui2db(ref object value, yo_column column) {
             var result = true;
-            switch (dataType) {
+            switch (column.data_type) {
                 case DataType.Number:
                     result = YoTool.ParseDouble(ref value);
                     break;
@@ -31,6 +32,31 @@ namespace Yo
                     break;
                 case DataType.Text:
                     result = YoTool.ParseString(ref value);
+                    break;
+                case DataType.Datetime:
+                    result = YoTool.ParseDatetime(ref value);
+                    break;
+            }
+            return result;
+        }
+
+        public object db2ui(object value, yo_column column) {
+            object result = value;
+            switch (column.data_type) {
+                case DataType.Number: {
+                        var format = ConfigHelper.GetValue(column._commentobj, FORMAT);
+                        if (format != null) {
+                            var formatStr = "{0:F" + format + "}";
+                            result = string.Format(formatStr, value);
+                        }
+                    }
+                    break;
+                case DataType.Datetime: {
+                        var format = ConfigHelper.GetValue(column._commentobj, FORMAT);
+                        if (format != null) {
+                            result = Convert.ToDateTime(value).ToShortDateString();
+                        }
+                    }
                     break;
             }
             return result;

@@ -90,6 +90,26 @@ namespace Yo
             return result;
         }
 
+        static public bool ParseDatetime(ref object value) {
+            bool result = true;
+            while (true) {
+                if (value == null) {
+                    result = false;
+                    break;
+                }
+
+                try {
+                    value = Convert.ToDateTime(value);
+                }
+                catch {
+                    result = false;
+                }
+
+                break;
+            }
+            return result;
+        }
+
     }
 
 }

@@ -62,7 +62,7 @@ namespace Yo
             }
         }
 
-        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<DataRow, object> func = null, string display = "display") {
+        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, DataRow, object> func = null, string display = "display") {
             var dict = new Dictionary<string, T>();
             while (true) {
                 var rows = GetRows(dt);
@@ -84,11 +84,11 @@ namespace Yo
                         var name = property.Name;
                         object value = null;
 
-                        if (name == display) {
+                        if (name.StartsWith("_")) {
                             if (func == null) {
                                 continue;
                             }
-                            value = func(row);
+                            value = func(name, row);
                         }
                         else {
                             value = row[name];
