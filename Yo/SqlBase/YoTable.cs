@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Yo
 {
@@ -19,15 +20,15 @@ namespace Yo
             return dict;
         }
 
-        public object GetComment(string table) {
-            object result = null;
+        public JObject GetComment(string table) {
+            JObject result = null;
             var sql = string.Format("SELECT {0} FROM information_schema.tables WHERE table_schema='{1}' AND table_name='{2}';",
                 yo_table.comment, m_schema_table, table);
 
             if (getData(sql)) {
                 var rows = YoSqlHelper.GetRows(m_dataTable);
                 if (rows != null) {
-                    result = rows[0][yo_table.comment];
+                    result = YoTool.GetJObject(rows[0][yo_table.comment].ToString());
                 }
             }
 

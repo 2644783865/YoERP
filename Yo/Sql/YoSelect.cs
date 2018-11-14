@@ -39,7 +39,9 @@ namespace Yo
                     break;
                 }
 
-                var format = (new YoTable()).GetComment(m_table) as string;
+                var comment = (new YoTable()).GetComment(m_table);
+                var formatObject = ConfigHelper.GetValue(comment, table_display);
+                var format = formatObject == null ? null : formatObject.ToString();
 
                 if (!string.IsNullOrEmpty(format)) {
                     var tableList = format.Split(',');

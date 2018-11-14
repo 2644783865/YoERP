@@ -8,6 +8,7 @@ namespace Yo
     public class YoSQL : YoConnect
     {
         protected const string ID = "id";
+        protected const string table_display = "display";
 
         protected string m_table;
         public Dictionary<string, yo_column> ColumnDict;

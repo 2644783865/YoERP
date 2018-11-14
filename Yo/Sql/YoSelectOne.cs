@@ -47,9 +47,9 @@ namespace Yo
 
         }
 
-        public Dictionary<string, yo_ui_column> GetUIColumnDict(object trans = null) {
+        public Dictionary<string, yo_ui_column> GetUIColumnDict(object trans = null, bool isModify = true) {
             var uiColumnDict = new Dictionary<string, yo_ui_column>();
-            if (!hasRow()) {
+            if (isModify && !hasRow()) {
                 return uiColumnDict;
             }
 
@@ -62,8 +62,10 @@ namespace Yo
                 ui_column.isPK = key == ID;
                 ui_column.key = key;
                 ui_column.keyDisplay = ConfigHelper.Translate(key, trans);
-                ui_column.value = row[key];
-                ui_column.valueDisplay = rowDisplay[key];
+                if (isModify) {
+                    ui_column.value = row[key];
+                    ui_column.valueDisplay = rowDisplay[key];
+                }
                 if (YoSqlHelper.IsRelation(key)) {
                     ui_column.refer = YoSqlHelper.GetRelationTable(key);
                 }

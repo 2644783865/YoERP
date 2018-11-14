@@ -66,6 +66,7 @@
     <Compile Include="SqlBase\YoConnect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JCore\ConfigHelper.cs" />
+    <Compile Include="Tool\YoTool.cs" />
     <Compile Include="Tool\YoSqlHelper.cs" />
     <Compile Include="Tool\YoException.cs" />
   </ItemGroup>
