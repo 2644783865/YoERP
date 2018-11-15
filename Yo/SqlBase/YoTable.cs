@@ -5,33 +5,22 @@ namespace Yo
 {
     public class YoTable : YoConnect
     {
-        yo_table c_table;
-        string c_name;
-        string c_rows;
-        string c_comment;
-
-        public YoTable() {
-            c_table = null;
-            c_name = nameof(c_table.table_name);
-            c_rows = nameof(c_table.table_rows);
-            c_comment = nameof(c_table.table_comment);
-        }
-
         public Dictionary<string, yo_table> GetTables(object trans = null) {
             var dict = new Dictionary<string, yo_table>();
 
+            yo_table c;
             var sql = string.Format("SELECT {0}, {1}, {2} FROM information_schema.tables WHERE table_schema='{3}';",
-                    c_name, c_rows, c_comment, m_schema_table);
+                    nameof(c.table_name), nameof(c.table_rows), nameof(c.table_comment), m_schema_table);
 
             if (getData(sql)) {
-                dict = YoSqlHelper.Datatable2Dict<yo_table>(m_dataTable, c_name, (key, row) => {
+                dict = YoSqlHelper.Datatable2Dict<yo_table>(m_dataTable, nameof(c.table_name), (key, yoTable) => {
                     object obj = null;
                     switch (key) {
-                        case nameof(c_table._display):
-                            obj = ConfigHelper.Translate(row[c_name], trans);
+                        case nameof(c._display):
+                            obj = ConfigHelper.Translate(yoTable.table_name, trans);
                             break;
-                        case nameof(c_table._commentobj):
-                            obj = YoTool.GetJObject(row[c_comment].ToString());
+                        case nameof(c._commentobj):
+                            obj = YoTool.GetJObject(yoTable.table_comment);
                             break;
                     }
                     return obj;
@@ -43,13 +32,15 @@ namespace Yo
 
         public JObject GetComment(string table) {
             JObject result = null;
+
+            yo_table c;
             var sql = string.Format("SELECT {0} FROM information_schema.tables WHERE table_schema='{1}' AND table_name='{2}';",
-                c_comment, m_schema_table, table);
+                nameof(c.table_comment), m_schema_table, table);
 
             if (getData(sql)) {
                 var rows = YoSqlHelper.GetRows(m_dataTable);
                 if (rows != null) {
-                    result = YoTool.GetJObject(rows[0][c_comment].ToString());
+                    result = YoTool.GetJObject(rows[0][nameof(c.table_comment)].ToString());
                 }
             }
 

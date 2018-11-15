@@ -59,17 +59,8 @@ namespace Yo
 
                 YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
                     while (true) {
-                        if (key == ID) {
-                            break;
-                        }
-
-                        if (!dict.ContainsKey(key)) {
-                            break;
-                        }
-
-                        var value = dict[key];
-                        if (!ui2db(ref value, column)) {
-                            ErrorList.Add(key, value);
+                        object value = null;
+                        if (!checkColumn(ref value, dict, key, column)) {
                             break;
                         }
 

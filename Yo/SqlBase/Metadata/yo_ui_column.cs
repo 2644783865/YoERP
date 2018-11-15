@@ -1,4 +1,6 @@
-﻿namespace Yo
+﻿using System.Collections.Generic;
+
+namespace Yo
 {
     public class yo_ui_column
     {
@@ -10,5 +12,6 @@
 
         public bool isPK { get; set; }
         public string refer { get; set; }
+        public Dictionary<string, string> _set { get; set; }
     }
 }

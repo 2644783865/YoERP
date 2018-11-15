@@ -62,6 +62,7 @@ namespace Yo
                 ui_column.isPK = key == ID;
                 ui_column.key = key;
                 ui_column.keyDisplay = ConfigHelper.Translate(key, trans);
+                ui_column._set = column._set;
                 if (isModify) {
                     ui_column.value = row[key];
                     ui_column.valueDisplay = rowDisplay[key];

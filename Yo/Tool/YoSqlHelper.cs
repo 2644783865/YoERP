@@ -62,7 +62,7 @@ namespace Yo
             }
         }
 
-        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, DataRow, object> func = null, string display = "display") {
+        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, T, object> func = null, string display = "display") {
             var dict = new Dictionary<string, T>();
             while (true) {
                 var rows = GetRows(dt);
@@ -88,7 +88,7 @@ namespace Yo
                             if (func == null) {
                                 continue;
                             }
-                            value = func(name, row);
+                            value = func(name, item);
                         }
                         else {
                             value = row[name];
@@ -111,6 +111,47 @@ namespace Yo
 
         static public string GetRelationTable(string key) {
             return key.Replace("_id", "");
+        }
+
+        static public List<string> GetSetList(object content) {
+            var result = new List<string>();
+            if(content == null) {
+                return result;
+            }
+
+            var datatypeEx = content.ToString();
+            var itemStr = datatypeEx.Replace("set(", "").Replace(")", "");
+            var itemArr = itemStr.Split(',');
+            foreach (var item in itemArr) {
+                result.Add(item.Trim().Replace("'", ""));
+            }
+            return result;
+        }
+
+        static public DataType GetDataType(string content, object commentobj) {
+            if(ConfigHelper.GetValue(commentobj, "calc") != null) {
+                return DataType.Calc;
+            }
+
+            DataType result = DataType.Unknown;
+            switch (content) {
+                case "double":
+                    result = DataType.Number;
+                    break;
+                case "varchar":
+                    result = DataType.Text;
+                    break;
+                case "int":
+                    result = DataType.Identity;
+                    break;
+                case "datetime":
+                    result = DataType.Datetime;
+                    break;
+                case "set":
+                    result = DataType.Set;
+                    break;
+            }
+            return result;
         }
 
     }

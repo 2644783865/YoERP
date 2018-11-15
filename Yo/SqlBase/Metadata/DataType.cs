@@ -1,10 +1,13 @@
 ﻿namespace Yo
 {
-    public class  DataType
+    public enum  DataType
     {
-        public const string Number = "double";
-        public const string Text = "varchar";
-        public const string Identity = "int";
-        public const string Datetime = "datetime";
+        Unknown,
+        Number,
+        Text,
+        Identity,
+        Datetime,
+        Set,
+        Calc
     }
 }

@@ -21,9 +21,36 @@ namespace Yo
             ColumnDict = obj.GetColumns(m_table);
         }
 
+        public bool checkColumn(ref object value, Dictionary<string, object> dict, string key, yo_column column) {
+            bool result = false;
+            while (true) {
+                if (key == ID) {
+                    break;
+                }
+
+                if (column._datatype == DataType.Calc) {
+                    break;
+                }
+
+                if (!dict.ContainsKey(key)) {
+                    break;
+                }
+
+                value = dict[key];
+                if (!ui2db(ref value, column)) {
+                    ErrorList.Add(key, value);
+                    break;
+                }
+
+                result = true;
+                break;
+            }
+            return result;
+        }
+
         public bool ui2db(ref object value, yo_column column) {
             var result = true;
-            switch (column.data_type) {
+            switch (column._datatype) {
                 case DataType.Number:
                     result = YoTool.ParseDouble(ref value);
                     break;
@@ -42,8 +69,9 @@ namespace Yo
 
         public object db2ui(object value, yo_column column) {
             object result = value;
-            switch (column.data_type) {
-                case DataType.Number: {
+            switch (column._datatype) {
+                case DataType.Number:
+                case DataType.Calc: {
                         var format = ConfigHelper.GetValue(column._commentobj, FORMAT);
                         if (format != null) {
                             var formatStr = "{0:F" + format + "}";
@@ -55,6 +83,14 @@ namespace Yo
                         var format = ConfigHelper.GetValue(column._commentobj, FORMAT);
                         if (format != null) {
                             result = Convert.ToDateTime(value).ToShortDateString();
+                        }
+                    }
+                    break;
+                case DataType.Set:
+                    if (value != null && column._set != null) {
+                        var setKey = value.ToString();
+                        if (column._set.ContainsKey(setKey)) {
+                            result = column._set[setKey];
                         }
                     }
                     break;
