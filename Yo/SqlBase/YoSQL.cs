@@ -7,6 +7,7 @@ namespace Yo
 {
     public class YoSQL : YoConnect
     {
+        protected const string UPTIME = "uptime";
         protected const string ID = "id";
         protected const string ROW_TITLE = "title";
         protected const string FORMAT = "format";
@@ -25,6 +26,10 @@ namespace Yo
             bool result = false;
             while (true) {
                 if (key == ID) {
+                    break;
+                }
+
+                if (key == UPTIME) {
                     break;
                 }
 

@@ -1,4 +1,5 @@
 ﻿using MySql.Data.MySqlClient;
+using System;
 using System.Collections.Generic;
 
 namespace Yo
@@ -8,6 +9,56 @@ namespace Yo
         List<string> m_listSqlSet;
 
         public YoUpdate(string table) : base(table) { }
+        
+        public object getUptime(object id) {
+            object result = null;
+            var sql = string.Format("SELECT {0} FROM `{1}` WHERE id='{2}';", UPTIME, m_table, id);
+            try {
+                using (var conn = new MySqlConnection(m_connectionString)) {
+                    conn.Open();
+                    var cmd = new MySqlCommand(sql, conn);
+                    result = cmd.ExecuteScalar();
+                }
+            }
+            catch {
+            }
+            return result;
+        }
+
+        public bool checkUptime(Dictionary<string, object> dict) {
+            bool result = false;
+            while (true) {
+                if (!ColumnDict.ContainsKey(UPTIME)) {
+                    result = true;
+                    break;
+                }
+
+                // ui uptime
+                if (!dict.ContainsKey(UPTIME)) {
+                    break;
+                }
+
+                var uiUptime = dict[UPTIME];
+                if (!YoTool.ParseDatetime(ref uiUptime)) {
+                    break;
+                }
+
+                // db uptime
+                var uptime = getUptime(dict[ID]);
+                if (!YoTool.ParseDatetime(ref uptime)) {
+                    break;
+                }
+
+                if ((DateTime)uptime != (DateTime)uiUptime) {
+                    break;
+                }
+
+                result = true;
+                break;
+            }
+            return result;
+
+        }
 
         public bool Update(Dictionary<string, object> dict) {
             var result = false;
@@ -20,6 +71,10 @@ namespace Yo
                     break;
                 }
 
+                if (!checkUptime(dict)) {
+                    Message = "dirty data";
+                    break;
+                }
 
                 if (!parseSqlSet(dict)) {
                     break;

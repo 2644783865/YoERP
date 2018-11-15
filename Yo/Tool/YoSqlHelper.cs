@@ -145,6 +145,7 @@ namespace Yo
                     result = DataType.Identity;
                     break;
                 case "datetime":
+                case "timestamp":
                     result = DataType.Datetime;
                     break;
                 case "set":
