@@ -8,10 +8,10 @@ namespace Yo
     public class YoSQL : YoConnect
     {
         protected const string UPTIME = "uptime";
-        protected const string ID = "id";
         protected const string ROW_TITLE = "title";
         protected const string FORMAT = "format";
 
+        protected YoCache m_cache;
         protected string m_table;
         public Dictionary<string, yo_column> ColumnDict;
         public Dictionary<string, object> ErrorList;
@@ -20,6 +20,7 @@ namespace Yo
             m_table = table;
             var obj = new YoColumn();
             ColumnDict = obj.GetColumns(m_table);
+            m_cache = new YoCache(m_table);
         }
 
         public bool checkColumn(ref object value, Dictionary<string, object> dict, string key, yo_column column) {

@@ -14,8 +14,14 @@ namespace Yo
         }
 
         public string GetDisplay(object id, bool isRow = false) {
-            string result = "";
+            string result = null;
             while (true) {
+                // get cache
+                var temp = m_cache.Get(id);
+                if(temp != null) {
+                    return temp.ToString();
+                }
+
                 DataRow row = null;
                 if (isRow) {
                     row = id as DataRow;
@@ -71,6 +77,11 @@ namespace Yo
                 }
 
                 break;
+            }
+
+            // set cache
+            if (result != null) {
+                m_cache.Set(id, result);
             }
 
             return result;

@@ -9,7 +9,7 @@ namespace Yo
         List<string> m_listSqlSet;
 
         public YoUpdate(string table) : base(table) { }
-        
+
         public object getUptime(object id) {
             object result = null;
             var sql = string.Format("SELECT {0} FROM `{1}` WHERE id='{2}';", UPTIME, m_table, id);
@@ -88,6 +88,10 @@ namespace Yo
                         var cmd = new MySqlCommand(sql, conn);
                         cmd.ExecuteNonQuery();
                     }
+
+                    // remove cache
+                    m_cache.CacheRow(dict[ID]);
+
                     result = true;
                 }
                 catch (MySqlException e) {

@@ -11,12 +11,19 @@ namespace Yo
         protected string m_schema_table;
         protected DataTable m_dataTable;
 
+        protected const string ID = "id";
+        protected const string SCHEMA_TABLE = "schema_table";
+        protected const string CACHE_TABLE = "cache_table";
+        protected const string YODATA = "yodata";
+
         public string Message { get; set; }
         public DataTable DataTable { get { return m_dataTable; } }
 
         public YoConnect() {
-            string schema_table = nameof(schema_table);
-            string yodata = nameof(yodata);
+            LoadConfig(SCHEMA_TABLE);
+        }
+
+        public void LoadConfig(string schema_table, string yodata = YODATA) {
             m_schema_table = ConfigurationManager.AppSettings[schema_table];
             m_connectionString = ConfigurationManager.AppSettings[yodata];
 
