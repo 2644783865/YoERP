@@ -45,37 +45,21 @@ namespace Yo
                     break;
                 }
 
-                var comment = (new YoTable()).GetComment(m_table);
-                var formatObject = ConfigHelper.GetValue(comment, ROW_TITLE);
-                var format = formatObject == null ? null : formatObject.ToString();
-
-                if (!string.IsNullOrEmpty(format)) {
-                    var tableList = format.Split(',');
-                    var displayList = new List<string>();
-                    foreach (var table in tableList) {
+                var titleList = new List<string>();
+                foreach (var field in m_titleFields) {
+                    string title = null;
+                    if (YoSqlHelper.IsRelation(field)) {
+                        var table = YoSqlHelper.GetRelationTable(field);
                         var select = new YoSelect(table);
-                        displayList.Add(select.GetDisplay(row[table + "_id"]));
-                    }
-                    result = string.Join("_", displayList);
-                    break;
-                }
-
-                foreach (var key in ColumnDict.Keys) {
-                    if (key == ID) {
-                        continue;
-                    }
-
-                    if (YoSqlHelper.IsRelation(key)) {
-                        var table = YoSqlHelper.GetRelationTable(key);
-                        var select = new YoSelect(table);
-                        result = select.GetDisplay(row[key]);
+                        title = select.GetDisplay(row[field]);
                     }
                     else {
-                        result = row[key].ToString();
+                        title = row[field].ToString();
                     }
-                    break;
+                    titleList.Add(title);
                 }
 
+                result = string.Join("_", titleList);
                 break;
             }
 

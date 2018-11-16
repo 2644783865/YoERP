@@ -15,12 +15,14 @@ namespace Yo
         protected string m_table;
         public Dictionary<string, yo_column> ColumnDict;
         public Dictionary<string, object> ErrorList;
+        protected List<string> m_titleFields;
 
         public YoSQL(string table) {
             m_table = table;
             var obj = new YoColumn();
             ColumnDict = obj.GetColumns(m_table);
             m_cache = new YoCache(m_table);
+            m_titleFields = (new YoTable()).GetTitleFields(m_table);
         }
 
         public bool checkColumn(ref object value, Dictionary<string, object> dict, string key, yo_column column) {

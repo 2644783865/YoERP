@@ -47,5 +47,22 @@ namespace Yo
             return result;
         }
 
+        public List<string> GetTitleFields(string table) {
+            var result = new List<string>();
+            var comment = GetComment(table);
+            var formatObject = ConfigHelper.GetValue(comment, "title");
+            var format = formatObject == null ? null : formatObject.ToString();
+            if (!string.IsNullOrEmpty(format)) {
+                var temp = format.Split(',');
+                foreach(var item in temp) {
+                    result.Add(item);
+                }
+            }
+            if(result.Count == 0) {
+                result.Add(ID);
+            }
+            return result;
+        }
+
     }
 }

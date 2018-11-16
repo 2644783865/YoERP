@@ -8,6 +8,16 @@ namespace Yo
             LoadConfig(CACHE_TABLE);
         }
 
+        public void DeleteAll() {
+            var objCacheTables = new YoTable();
+            objCacheTables.LoadConfig(CACHE_TABLE);
+            var cacheTablesDict = objCacheTables.GetTables();
+
+            foreach (var table in cacheTablesDict.Keys) {
+                RunSql("truncate table " + table);
+            }
+        }
+
         public void Sync() {
             var objTables = new YoTable();
             var tables = objTables.GetTables().Keys;
