@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Yo
+﻿namespace Yo
 {
     public class yo_column
     {
@@ -9,9 +7,9 @@ namespace Yo
         public string column_type { get; set; }
         public string column_comment { get; set; }
 
-        public string _display { get; set; }
-        public object _commentobj { get; set; }
+        public string _translation { get; set; }
+        public object _comment { get; set; }
         public DataType _datatype { get; set; }
-        public Dictionary<string, string> _set { get; set; }
+        public object _info { get; set; }
     }
 }

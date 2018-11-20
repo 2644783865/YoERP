@@ -2,7 +2,7 @@
 
 namespace Yo
 {
-    public class YoCache : YoConnect, IYoCache
+    public class YoCache : YoEngine, IYoCache
     {
         protected string m_table;
         DbCache m_dbCache;
@@ -16,7 +16,7 @@ namespace Yo
             var TABLENAME = "table_name";
             var sql = string.Format("SELECT {0} FROM information_schema.referential_constraints WHERE constraint_schema='{1}' and referenced_table_name='{2}';",
                                 TABLENAME, m_schema_table, m_table);
-            if (!getData(sql)) {
+            if (!fillData(sql)) {
                 return;
             }
 
@@ -30,7 +30,7 @@ namespace Yo
 
         public void CacheRows(object key, object value) {
             var sql = string.Format("SELECT {0} FROM `{1}` WHERE `{2}`='{3}'", ID, m_table, key, value);
-            if (!getData(sql)) {
+            if (!fillData(sql)) {
                 return;
             }
 
@@ -46,7 +46,8 @@ namespace Yo
         }
 
         public object Get(object id) {
-            return ((IYoCache)m_dbCache).Get(id);
+            return null;
+//             return ((IYoCache)m_dbCache).Get(id);
         }
 
         public bool Set(object id, object value) {

@@ -1,57 +1,13 @@
-﻿using MySql.Data.MySqlClient;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace Yo
 {
-    public class YoUpdate : YoSQL
+    public class YoUpdate : YoReplace
     {
-
-        DataRow m_dbRow;
-        public Dictionary<string, object> m_uiDict;
         Dictionary<string, string> m_sqlSetDict;
 
         public YoUpdate(string table) : base(table) { }
-
-        public bool checkUptime() {
-            bool result = false;
-            while (true) {
-                if (!ColumnDict.ContainsKey(UPTIME)) {
-                    result = true;
-                    break;
-                }
-
-                // ui uptime
-                if (!m_uiDict.ContainsKey(UPTIME)) {
-                    break;
-                }
-
-                var uiUptime = m_uiDict[UPTIME];
-                if (!YoTool.ParseDatetime(ref uiUptime)) {
-                    break;
-                }
-
-                // db uptime
-                var uptime = m_dbRow[UPTIME];
-                if (!YoTool.ParseDatetime(ref uptime)) {
-                    break;
-                }
-
-                if ((DateTime)uptime != (DateTime)uiUptime) {
-                    break;
-                }
-
-                result = true;
-                break;
-            }
-            return result;
-        }
-
-        public bool LoadRow(object id) {
-            m_dbRow = (new YoSelectOne(m_table)).Find(id).GetRow();
-            return m_dbRow != null;
-        }
 
         public bool Update(Dictionary<string, object> uiDict) {
             var result = false;
@@ -65,12 +21,12 @@ namespace Yo
                     break;
                 }
 
-                if (!LoadRow(m_uiDict[ID])) {
+                if (!Find(m_uiDict[ID])) {
                     break;
                 }
 
                 if (!checkUptime()) {
-                    Message = "dirty data";
+                    m_errorDict[DB] = "dirty data";
                     break;
                 }
 
@@ -79,41 +35,65 @@ namespace Yo
                 }
 
                 var sql = string.Format("UPDATE `{0}` SET {1} WHERE `id`='{2}';", m_table, string.Join(",", m_sqlSetDict.Values), m_uiDict[ID]);
-
-                try {
-                    using (var conn = new MySqlConnection(m_connectionString)) {
-                        conn.Open();
-                        var cmd = new MySqlCommand(sql, conn);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // remove cache
-                    if (checkDirty()) {
-                        m_cache.CacheRow(m_uiDict[ID]);
-                    }
-
-                    result = true;
-                }
-                catch (MySqlException e) {
-                    Message = e.Message;
+                if (!runSql(sql)) {
                     break;
                 }
 
+                // remove cache
+                if (checkDisplayChange()) {
+                    m_cache.CacheRow(m_uiDict[ID]);
+                }
+
+                result = true;
                 break;
             }
 
             return result;
         }
 
-        public bool checkDirty() {
-            var isDirty = false;
+        public bool checkUptime() {
+            bool result = false;
+            while (true) {
+                if (!m_yoColumnDict.ContainsKey(UPTIME)) {
+                    result = true;
+                    break;
+                }
+
+                // ui uptime
+                if (!m_uiDict.ContainsKey(UPTIME)) {
+                    break;
+                }
+
+                var uiUptime = m_uiDict[UPTIME];
+                if (!YoConvert.ToDatetime(ref uiUptime)) {
+                    break;
+                }
+
+                // db uptime
+                var uptime = m_dataRow[UPTIME];
+                if (!YoConvert.ToDatetime(ref uptime)) {
+                    break;
+                }
+
+                if ((DateTime)uptime != (DateTime)uiUptime) {
+                    break;
+                }
+
+                result = true;
+                break;
+            }
+            return result;
+        }
+
+        public bool checkDisplayChange() {
+            var isChanged = false;
             foreach (var field in m_titleFields) {
                 if (m_sqlSetDict.ContainsKey(field)) {
-                    isDirty = true;
+                    isChanged = true;
                     break;
                 }
             }
-            return isDirty;
+            return isChanged;
         }
 
         public bool parseSqlSet() {
@@ -123,10 +103,10 @@ namespace Yo
                     break;
                 }
 
-                ErrorList = new Dictionary<string, object>();
+                m_errorDict = new Dictionary<string, object>();
                 m_sqlSetDict = new Dictionary<string, string>();
 
-                YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
+                YoSqlHelper.EachColumn(m_yoColumnDict, (key, column) => {
                     while (true) {
                         object value = null;
                         if (!checkColumn(ref value, m_uiDict, key, column)) {
@@ -137,7 +117,7 @@ namespace Yo
                             break;
                         }
 
-                        var dbValue = m_dbRow[key];
+                        var dbValue = m_dataRow[key];
                         if (dbValue != null) {
                             if(value.ToString() == dbValue.ToString()) {
                                 break;
@@ -150,7 +130,7 @@ namespace Yo
                     }
                 });
 
-                if(ErrorList.Count > 0) {
+                if(m_errorDict.Count > 0) {
                     break;
                 }
 

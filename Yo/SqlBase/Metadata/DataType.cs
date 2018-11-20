@@ -3,11 +3,12 @@
     public enum  DataType
     {
         Unknown,
+        ID,
+        Refer,
         Number,
+        Calc,
         Text,
-        Identity,
-        Datetime,
         Set,
-        Calc
+        Datetime
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Yo
 {
-    public class DbCache : YoConnect, IYoCache
+    public class DbCache : YoEngine, IYoCache
     {
         protected const string TITLE = "title";
         protected string m_table;
@@ -65,7 +65,7 @@ namespace Yo
         }
 
         public object Get(object id) {
-            if(!YoTool.ParseInt(ref id)) {
+            if(!YoConvert.ToInt(ref id)) {
                 return null;
             }
             return sqlGet((int)id);
@@ -74,7 +74,7 @@ namespace Yo
         public bool Set(object id, object value) {
             var result = false;
             while (true) {
-                if (!YoTool.ParseInt(ref id)) {
+                if (!YoConvert.ToInt(ref id)) {
                     break;
                 }
 

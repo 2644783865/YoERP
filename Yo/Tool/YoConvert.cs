@@ -4,29 +4,9 @@ using System;
 
 namespace Yo
 {
-    public class YoTool
+    public class YoConvert
     {
-        static public JObject GetJObject(string content) {
-            JObject result = null;
-            while (true) {
-                if (string.IsNullOrEmpty(content)) {
-                    break;
-                }
-
-                content = "{" + content + "}";
-
-                try {
-                    result = JsonConvert.DeserializeObject(content) as JObject;
-                }
-                catch { }
-
-                break;
-            }
-
-            return result;
-        }
-
-        static public bool ParseInt(ref object value) {
+        static public bool ToInt(ref object value) {
             bool result = true;
             while (true) {
                 if(value is string) {
@@ -48,7 +28,7 @@ namespace Yo
             return result;
         }
 
-        static public bool ParseDouble(ref object value) {
+        static public bool ToDouble(ref object value) {
             bool result = true;
             while (true) {
                 if (value is string) {
@@ -70,7 +50,7 @@ namespace Yo
             return result;
         }
 
-        static public bool ParseString(ref object value) {
+        static public bool ToString(ref object value) {
             bool result = true;
             while (true) {
                 if (value == null) {
@@ -90,7 +70,7 @@ namespace Yo
             return result;
         }
 
-        static public bool ParseDatetime(ref object value) {
+        static public bool ToDatetime(ref object value) {
             bool result = true;
             while (true) {
                 if (value == null) {
@@ -104,6 +84,45 @@ namespace Yo
                 catch {
                     result = false;
                 }
+
+                break;
+            }
+            return result;
+        }
+
+        static public JObject Text2Json(string content) {
+            JObject result = null;
+            while (true) {
+                if (string.IsNullOrWhiteSpace(content)) {
+                    break;
+                }
+
+                content = content.Trim();
+                if (!content.StartsWith("{")) {
+                    content = "{" + content + "}";
+                }
+
+                try {
+                    result = JsonConvert.DeserializeObject(content) as JObject;
+                }
+                catch { }
+
+                break;
+            }
+            return result;
+        }
+
+        static public string Json2Text(JObject obj) {
+            string result = null;
+            while (true) {
+                if (obj == null) {
+                    break;
+                }
+
+                try {
+                    result = JsonConvert.SerializeObject(obj);
+                }
+                catch { }
 
                 break;
             }

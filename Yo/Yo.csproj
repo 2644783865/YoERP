@@ -55,23 +55,24 @@
     <Compile Include="Cache\DbCache.cs" />
     <Compile Include="Cache\IYoCache.cs" />
     <Compile Include="JCore\FileHelper.cs" />
-    <Compile Include="SqlBase\Metadata\yo_ui_column.cs" />
+    <Compile Include="SqlBase\Metadata\yo_column_ui.cs" />
     <Compile Include="SqlBase\Metadata\yo_table.cs" />
     <Compile Include="SqlBase\Metadata\yo_column.cs" />
     <Compile Include="SqlBase\Metadata\DataType.cs" />
-    <Compile Include="SqlBase\Metadata\yo_ui_row.cs" />
-    <Compile Include="SqlBase\YoColumn.cs" />
+    <Compile Include="SqlBase\Metadata\yo_column_value.cs" />
+    <Compile Include="SqlBase\YoColumnInfo.cs" />
     <Compile Include="SqlBase\YoSQL.cs" />
     <Compile Include="Cache\YoCache.cs" />
     <Compile Include="Sql\YoInsert.cs" />
     <Compile Include="Sql\YoSelectOne.cs" />
+    <Compile Include="Sql\YoReplace.cs" />
     <Compile Include="Sql\YoUpdate.cs" />
     <Compile Include="Sql\YoSelect.cs" />
-    <Compile Include="SqlBase\YoTable.cs" />
-    <Compile Include="SqlBase\YoConnect.cs" />
+    <Compile Include="SqlBase\YoTableInfo.cs" />
+    <Compile Include="SqlBase\YoEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JCore\ConfigHelper.cs" />
-    <Compile Include="Tool\YoTool.cs" />
+    <Compile Include="Tool\YoConvert.cs" />
     <Compile Include="Tool\YoSqlHelper.cs" />
     <Compile Include="Tool\YoException.cs" />
   </ItemGroup>
@@ -79,6 +80,7 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

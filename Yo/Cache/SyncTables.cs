@@ -2,16 +2,16 @@
 
 namespace Yo
 {
-    public class SyncTables : YoConnect
+    public class SyncTables : YoEngine
     {
         public SyncTables() {
             LoadConfig(CACHE_TABLE);
         }
 
         public void DeleteAll() {
-            var objCacheTables = new YoTable();
+            var objCacheTables = new YoTableInfo();
             objCacheTables.LoadConfig(CACHE_TABLE);
-            var cacheTablesDict = objCacheTables.GetTables();
+            var cacheTablesDict = objCacheTables.GetTableDict();
 
             foreach (var table in cacheTablesDict.Keys) {
                 RunSql("truncate table " + table);
@@ -19,12 +19,12 @@ namespace Yo
         }
 
         public void Sync() {
-            var objTables = new YoTable();
-            var tables = objTables.GetTables().Keys;
+            var objTables = new YoTableInfo();
+            var tables = objTables.GetTableDict().Keys;
 
-            var objCacheTables = new YoTable();
+            var objCacheTables = new YoTableInfo();
             objCacheTables.LoadConfig(CACHE_TABLE);
-            var cacheTablesDict = objCacheTables.GetTables();
+            var cacheTablesDict = objCacheTables.GetTableDict();
 
             foreach(var table in tables) {
                 var cacheTable = table + "_cache";
@@ -52,7 +52,7 @@ namespace Yo
                 return true;
             }
             catch (MySqlException e) {
-                Message = e.Message;
+                m_errorDict[DB] = e.Message;
                 return false;
             }
         }

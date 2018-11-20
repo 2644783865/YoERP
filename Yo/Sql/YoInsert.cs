@@ -1,9 +1,8 @@
-﻿using MySql.Data.MySqlClient;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Yo
 {
-    public class YoInsert : YoSQL
+    public class YoInsert : YoReplace
     {
         List<string> m_listSqlColumn;
         List<string> m_listSqlValue;
@@ -26,41 +25,33 @@ namespace Yo
                 }
 
                 var sql = string.Format("INSERT INTO `{0}` ({1}) VALUES ({2});", m_table, string.Join(",", m_listSqlColumn), string.Join(",", m_listSqlValue));
-
-                try {
-                    using (var conn = new MySqlConnection(m_connectionString)) {
-                        conn.Open();
-                        var cmd = new MySqlCommand(sql, conn);
-                        cmd.ExecuteNonQuery();
-                    }
-                    result = true;
-                }
-                catch (MySqlException e) {
-                    Message = e.Message;
+                if (!runSql(sql)) {
                     break;
                 }
 
+                result = true;
                 break;
             }
 
             return result;
         }
 
-        public bool parseSqlValues(Dictionary<string, object> dict) {
+        public bool parseSqlValues(Dictionary<string, object> uiDict) {
             bool result = false;
             while (true) {
-                if (dict == null) {
+                m_uiDict = uiDict;
+                if (m_uiDict == null) {
                     break;
                 }
 
-                ErrorList = new Dictionary<string, object>();
+                m_errorDict = new Dictionary<string, object>();
                 m_listSqlColumn = new List<string>();
                 m_listSqlValue = new List<string>();
 
-                YoSqlHelper.EachColumn(ColumnDict, (key, column) => {
+                YoSqlHelper.EachColumn(m_yoColumnDict, (key, column) => {
                     while (true) {
                         object value = null;
-                        if (!checkColumn(ref value, dict, key, column)) {
+                        if (!checkColumn(ref value, m_uiDict, key, column)) {
                             break;
                         }
 
@@ -70,7 +61,7 @@ namespace Yo
                     }
                 });
 
-                if (ErrorList.Count > 0) {
+                if (m_errorDict.Count > 0) {
                     break;
                 }
 

@@ -6,44 +6,8 @@ namespace Yo
 {
     public class YoSqlHelper
     {
-        static public DataRowCollection GetRows(DataTable dt) {
-            DataRowCollection rows = null;
-            while (true) {
-                if (dt == null) {
-                    break;
-                }
-
-                var temp = dt.Rows;
-                if (temp.Count == 0) {
-                    break;
-                }
-
-                rows = temp;
-                break;
-            }
-            return rows;
-        }
-
-        static public DataView GetView(DataTable dt) {
-            DataView view = null;
-            while (true) {
-                if (dt == null) {
-                    break;
-                }
-
-                var temp = dt.DefaultView;
-                if (temp.Count == 0) {
-                    break;
-                }
-
-                view = temp;
-                break;
-            }
-            return view;
-        }
-
         static public void EachRow(DataRowCollection rows, Action<DataRow> act) {
-            if (rows == null || act == null) {
+            if (act == null || rows == null || rows.Count == 0) {
                 return;
             }
 
@@ -53,7 +17,7 @@ namespace Yo
         }
 
         static public void EachColumn(Dictionary<string, yo_column> columnDict, Action<string, yo_column> act) {
-            if (columnDict == null || act == null) {
+            if (act == null || columnDict == null || columnDict.Count == 0) {
                 return;
             }
 
@@ -62,11 +26,10 @@ namespace Yo
             }
         }
 
-        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, T, object> func = null, string display = "display") {
+        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, T, object> func = null) {
             var dict = new Dictionary<string, T>();
             while (true) {
-                var rows = GetRows(dt);
-                if (rows == null) {
+                if(dt == null || dt.Rows.Count == 0) {
                     break;
                 }
 
@@ -77,7 +40,7 @@ namespace Yo
                 }
 
                 var propertyList = type.GetProperties();
-                foreach (DataRow row in rows) {
+                foreach (DataRow row in dt.Rows) {
                     var item = (T)Activator.CreateInstance(type, null);
 
                     foreach (var property in propertyList) {
@@ -105,11 +68,7 @@ namespace Yo
             return dict;
         }
 
-        static public bool IsRelation(string key) {
-            return key.EndsWith("_id");
-        }
-
-        static public string GetRelationTable(string key) {
+        static public string GetReferTable(string key) {
             return key.Replace("_id", "");
         }
 
@@ -128,29 +87,31 @@ namespace Yo
             return result;
         }
 
-        static public DataType GetDataType(string content, object commentobj) {
-            if(ConfigHelper.GetValue(commentobj, "calc") != null) {
-                return DataType.Calc;
-            }
-
+        static public DataType GetDataType(string key, string content, object commentobj) {
             DataType result = DataType.Unknown;
-            switch (content) {
-                case "double":
-                    result = DataType.Number;
-                    break;
-                case "varchar":
-                    result = DataType.Text;
-                    break;
-                case "int":
-                    result = DataType.Identity;
-                    break;
-                case "datetime":
-                case "timestamp":
-                    result = DataType.Datetime;
-                    break;
-                case "set":
-                    result = DataType.Set;
-                    break;
+            if (key == "id") {
+                result = DataType.ID;
+            }
+            else if (key.EndsWith("_id")) {
+                result = DataType.Refer;
+            }
+            else {
+                switch (content) {
+                    case "int":
+                    case "double":
+                        result = ConfigHelper.GetValue(commentobj, "calc") == null ? DataType.Number : DataType.Calc;
+                        break;
+                    case "varchar":
+                        result = DataType.Text;
+                        break;
+                    case "datetime":
+                    case "timestamp":
+                        result = DataType.Datetime;
+                        break;
+                    case "set":
+                        result = DataType.Set;
+                        break;
+                }
             }
             return result;
         }
