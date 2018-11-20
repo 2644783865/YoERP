@@ -1,24 +1,26 @@
-﻿using MySql.Data.MySqlClient;
-
-namespace Yo
+﻿namespace Yo
 {
-    public class SyncTables : YoEngine
+    public class SyncCache : YoEngine
     {
-        public SyncTables() {
+        public SyncCache() {
             LoadConfig(CACHE_TABLE);
         }
 
-        public void DeleteAll() {
+        public void CleanTables() {
             var objCacheTables = new YoTableInfo();
             objCacheTables.LoadConfig(CACHE_TABLE);
             var cacheTablesDict = objCacheTables.GetTableDict();
 
             foreach (var table in cacheTablesDict.Keys) {
-                RunSql("truncate table " + table);
+                cleanTable(table);
             }
         }
 
-        public void Sync() {
+        public void cleanTable(string table) {
+            runSql("truncate table " + table);
+        }
+
+        public void SyncTables() {
             var objTables = new YoTableInfo();
             var tables = objTables.GetTableDict().Keys;
 
@@ -27,34 +29,19 @@ namespace Yo
             var cacheTablesDict = objCacheTables.GetTableDict();
 
             foreach(var table in tables) {
-                var cacheTable = table + "_cache";
+                var cacheTable = table + CACHE;
                 if (!cacheTablesDict.ContainsKey(cacheTable)) {
-                    CreateTable(cacheTable);
+                    createTable(cacheTable);
                 }
             }
         }
 
-        public bool CreateTable(string table) {
+        public bool createTable(string table) {
             var fields = "      `id` INT NOT NULL,  "
                         + "     `title` VARCHAR(31) NOT NULL,   "
                         + "     PRIMARY KEY(`id`)   ";
             var sql = string.Format("CREATE TABLE `{0}` ({1}) ENGINE = MEMORY", table, fields);
-            return RunSql(sql);
-        }
-
-        public bool RunSql(string sql) {
-            try {
-                using (var conn = new MySqlConnection(m_connectionString)) {
-                    conn.Open();
-                    var cmd = new MySqlCommand(sql, conn);
-                    var result = cmd.ExecuteNonQuery();
-                }
-                return true;
-            }
-            catch (MySqlException e) {
-                m_errorDict[DB] = e.Message;
-                return false;
-            }
+            return runSql(sql);
         }
 
     }

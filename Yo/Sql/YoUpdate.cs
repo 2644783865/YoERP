@@ -40,8 +40,9 @@ namespace Yo
                 }
 
                 // remove cache
-                if (checkDisplayChange()) {
-                    m_cache.CacheRow(m_uiDict[ID]);
+                var yoRefer = new YoCacheRefer(m_table);
+                if (yoRefer.CheckDisplayChange(m_sqlSetDict)) {
+                    yoRefer.ReferRow(m_uiDict[ID]);
                 }
 
                 result = true;
@@ -83,17 +84,6 @@ namespace Yo
                 break;
             }
             return result;
-        }
-
-        public bool checkDisplayChange() {
-            var isChanged = false;
-            foreach (var field in m_titleFields) {
-                if (m_sqlSetDict.ContainsKey(field)) {
-                    isChanged = true;
-                    break;
-                }
-            }
-            return isChanged;
         }
 
         public bool parseSqlSet() {

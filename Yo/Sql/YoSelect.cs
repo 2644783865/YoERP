@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 
 namespace Yo
 {
@@ -38,6 +37,30 @@ namespace Yo
             }
 
             return displayTable;
+        }
+
+        public DataTable GetTableTitleDisplay() {
+            DataTable titleDisplayTable = null;
+            while (true) {
+                if (m_dataTable == null) {
+                    break;
+                }
+
+                titleDisplayTable = new DataTable();
+                titleDisplayTable.Columns.Add(new DataColumn(ID, typeof(int)));
+                titleDisplayTable.Columns.Add(new DataColumn(TITLE, typeof(string)));
+
+                foreach (DataRow row in m_dataTable.Rows) {
+                    var rowNew = titleDisplayTable.NewRow();
+                    titleDisplayTable.Rows.Add(rowNew);
+                    rowNew[ID] = row[ID];
+                    rowNew[TITLE] = GetRowTitleDisplay(row, true);
+                }
+
+                break;
+            }
+
+            return titleDisplayTable;
         }
 
     }

@@ -8,10 +8,13 @@ namespace Yo
     public class YoEngine
     {
         protected const string ID = "id";
+        protected const string DB = "db";
+        protected const string CACHE = "_cache";
+        protected const string TITLE = "title";
+
         protected const string SCHEMA_TABLE = "schema_table";
         protected const string CACHE_TABLE = "cache_table";
         protected const string YODATA = "yodata";
-        protected const string DB = "db";
 
         protected string m_schema_table;
         protected string m_connectionString;
@@ -125,6 +128,27 @@ namespace Yo
                 break;
             }
 
+            return result;
+        }
+
+        public object getFirst(string sql) {
+            object result = null;
+            while (true) {
+
+                try {
+                    using (var conn = new MySqlConnection(m_connectionString)) {
+                        conn.Open();
+                        var cmd = new MySqlCommand(sql, conn);
+                        result = cmd.ExecuteScalar();
+                    }
+                }
+                catch (MySqlException e) {
+                    m_errorDict[DB] = e.Message;
+                    break;
+                }
+
+                break;
+            }
             return result;
         }
 

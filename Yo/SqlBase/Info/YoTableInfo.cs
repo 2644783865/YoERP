@@ -55,7 +55,7 @@ namespace Yo
                     break;
                 }
 
-                var fieldsObject = ConfigHelper.GetValue(comment, "title");
+                var fieldsObject = ConfigHelper.GetValue(comment, TITLE);
                 if(fieldsObject == null) {
                     break;
                 }

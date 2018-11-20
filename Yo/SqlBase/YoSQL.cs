@@ -10,13 +10,15 @@ namespace Yo
         protected string m_table;
         protected Dictionary<string, yo_column> m_yoColumnDict;
         protected List<string> m_titleFields;
-        protected YoCache m_cache;
+        protected IYoCache m_cache;
+
+        public Dictionary<string, yo_column> YoColumnDict { get { return m_yoColumnDict; } }
 
         public YoSQL(string table, object trans = null) {
             m_table = table;
             m_yoColumnDict = (new YoColumnInfo()).GetColumnDict(m_table, trans);
             m_titleFields = (new YoTableInfo()).GetTitleFields(m_table);
-            m_cache = new YoCache(m_table);
+            m_cache = new DbCache(m_table);
         }
 
         public bool Find(object id) {

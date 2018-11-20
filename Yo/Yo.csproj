@@ -51,24 +51,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Cache\SyncTables.cs" />
+    <Compile Include="Cache\SyncCache.cs" />
     <Compile Include="Cache\DbCache.cs" />
     <Compile Include="Cache\IYoCache.cs" />
+    <Compile Include="Cache\YoCacheRefer.cs" />
     <Compile Include="JCore\FileHelper.cs" />
     <Compile Include="SqlBase\Metadata\yo_column_ui.cs" />
     <Compile Include="SqlBase\Metadata\yo_table.cs" />
     <Compile Include="SqlBase\Metadata\yo_column.cs" />
     <Compile Include="SqlBase\Metadata\DataType.cs" />
     <Compile Include="SqlBase\Metadata\yo_column_value.cs" />
-    <Compile Include="SqlBase\YoColumnInfo.cs" />
+    <Compile Include="SqlBase\Info\YoColumnInfo.cs" />
     <Compile Include="SqlBase\YoSQL.cs" />
-    <Compile Include="Cache\YoCache.cs" />
     <Compile Include="Sql\YoInsert.cs" />
     <Compile Include="Sql\YoSelectOne.cs" />
     <Compile Include="Sql\YoReplace.cs" />
     <Compile Include="Sql\YoUpdate.cs" />
     <Compile Include="Sql\YoSelect.cs" />
-    <Compile Include="SqlBase\YoTableInfo.cs" />
+    <Compile Include="SqlBase\Info\YoTableInfo.cs" />
     <Compile Include="SqlBase\YoEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JCore\ConfigHelper.cs" />
