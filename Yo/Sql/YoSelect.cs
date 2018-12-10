@@ -54,7 +54,7 @@ namespace Yo
                     var rowNew = titleDisplayTable.NewRow();
                     titleDisplayTable.Rows.Add(rowNew);
                     rowNew[ID] = row[ID];
-                    rowNew[TITLE] = getRowTitleDisplay(row, true);
+                    rowNew[TITLE] = GetRowTitleDisplay(row, true);
                 }
 
                 break;

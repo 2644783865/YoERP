@@ -45,7 +45,7 @@ namespace Yo
             while (true) {
                 if (yoColumn._datatype == DataType.Refer) {
                     var select = new YoSelect(yoColumn._info as string);
-                    result = select.getRowTitleDisplay(value);
+                    result = select.GetRowTitleDisplay(value);
                     break;
                 }
 
@@ -60,7 +60,7 @@ namespace Yo
             return result;
         }
 
-        protected string getRowTitleDisplay(object id, bool isRow = false) {
+        public string GetRowTitleDisplay(object id, bool isRow = false) {
             string result = null;
             while (true) {
                 // get cache
@@ -69,9 +69,11 @@ namespace Yo
                     return temp.ToString();
                 }
 
+                object _id = id;
                 DataRow row = null;
                 if (isRow) {
                     row = id as DataRow;
+                    _id = row[ID];
                 }
                 else if(Find(id)) {
                     row = m_dataRow;
@@ -92,15 +94,15 @@ namespace Yo
                     titleList.Add(title);
                 }
 
+
                 result = string.Join("_", titleList);
+
+                // set cache
+                if (result != null) {
+                    m_cache.Set(_id, result);
+                }
                 break;
             }
-
-            // set cache
-            if (result != null) {
-                m_cache.Set(id, result);
-            }
-
             return result;
         }
 

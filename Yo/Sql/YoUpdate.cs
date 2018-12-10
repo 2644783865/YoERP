@@ -7,7 +7,7 @@ namespace Yo
     {
         Dictionary<string, string> m_sqlSetDict;
 
-        public YoUpdate(string table) : base(table) { }
+        public YoUpdate(string table, object trans = null) : base(table, trans) { }
 
         public bool Update(Dictionary<string, object> uiDict) {
             var result = false;
@@ -40,7 +40,11 @@ namespace Yo
                 }
 
                 // remove cache
-                var yoRefer = new YoCacheRefer(m_table);
+                var yoRefer = new YoCacheRefer(m_table, (table, id) => {
+                    // create cache
+                    var selectone = new YoSelectOne(table, m_trans);
+                    selectone.GetRowTitleDisplay(id);
+                });
                 if (yoRefer.CheckDisplayChange(m_sqlSetDict)) {
                     yoRefer.ReferRow(m_uiDict[ID]);
                 }

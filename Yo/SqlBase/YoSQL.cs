@@ -8,6 +8,7 @@ namespace Yo
         protected const string FORMAT = "format";
 
         protected string m_table;
+        protected object m_trans;
         protected Dictionary<string, yo_column> m_yoColumnDict;
         protected List<string> m_titleFields;
         protected IYoCache m_cache;
@@ -16,7 +17,8 @@ namespace Yo
 
         public YoSQL(string table, object trans = null) {
             m_table = table;
-            m_yoColumnDict = (new YoColumnInfo()).GetColumnDict(m_table, trans);
+            m_trans = trans;
+            m_yoColumnDict = (new YoColumnInfo()).GetColumnDict(m_table, m_trans);
             m_titleFields = (new YoTableInfo()).GetTitleFields(m_table);
             m_cache = new DbCache(m_table);
         }

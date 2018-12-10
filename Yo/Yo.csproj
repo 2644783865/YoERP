@@ -55,6 +55,8 @@
     <Compile Include="Cache\DbCache.cs" />
     <Compile Include="Cache\IYoCache.cs" />
     <Compile Include="Cache\YoCacheRefer.cs" />
+    <Compile Include="Cache\YoCacheManage.cs" />
+    <Compile Include="Cache\YoCacheSelect.cs" />
     <Compile Include="JCore\FileHelper.cs" />
     <Compile Include="SqlBase\Metadata\yo_column_ui.cs" />
     <Compile Include="SqlBase\Metadata\yo_table.cs" />

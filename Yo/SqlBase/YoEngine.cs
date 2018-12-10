@@ -22,6 +22,7 @@ namespace Yo
         protected DataRow m_dataRow;
         protected Dictionary<string, object> m_errorDict;
 
+        public DataTable DataTable { get { return m_dataTable; } }
         public DataRowCollection Rows { get { return (m_dataTable != null) ? m_dataTable.Rows : null; } }
         public DataView View { get { return (m_dataTable != null) ? m_dataTable.DefaultView : null; } }
         public DataRow Row { get { return m_dataRow; } }

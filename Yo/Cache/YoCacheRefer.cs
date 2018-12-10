@@ -1,11 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace Yo
 {
     public class YoCacheRefer : YoSQL
     {
-        public YoCacheRefer(string table) : base(table) { }
+        Action<string, object> m_act;
+        public YoCacheRefer(string table, Action<string, object> act) : base(table) {
+            m_act = act;
+        }
 
         public bool CheckDisplayChange(Dictionary<string, string> sqlSetDict) {
             var isChanged = false;
@@ -31,7 +35,7 @@ namespace Yo
             sqlSetDict.Add(key, null);
             foreach (DataRow row in m_dataTable.Rows) {
                 var table = row[TABLENAME].ToString();
-                var refer = new YoCacheRefer(table);
+                var refer = new YoCacheRefer(table, m_act);
 
                 if (!refer.CheckDisplayChange(sqlSetDict)) {
                     continue;
@@ -54,6 +58,9 @@ namespace Yo
         public void ReferRow(object id) {
             if (m_cache.Set(id, null)) {
                 referTables(id);
+                if (m_act != null) {
+                    m_act(m_table, id);
+                }
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Yo
 
         public Dictionary<string, object> UiDict { set { m_uiDict = value; } }
 
-        public YoReplace(string table) : base(table) { }
+        public YoReplace(string table, object trans = null) : base(table, trans) { }
 
         bool ui2db(ref object value, yo_column yoColumn) {
             var result = true;
