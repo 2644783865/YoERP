@@ -16,7 +16,7 @@
             }
         }
 
-        public void cleanTable(string table) {
+        void cleanTable(string table) {
             runSql("truncate table " + table);
         }
 
@@ -36,7 +36,7 @@
             }
         }
 
-        public bool createTable(string table) {
+        bool createTable(string table) {
             var fields = "      `id` INT NOT NULL,  "
                         + "     `title` VARCHAR(31) NOT NULL,   "
                         + "     PRIMARY KEY(`id`)   ";

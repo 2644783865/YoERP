@@ -56,7 +56,7 @@ namespace Yo
             return true;
         }
 
-        public bool fillData(string sql) {
+        protected bool fillData(string sql) {
             var result = false;
             while (true) {
                 m_errorDict.Clear();
@@ -104,7 +104,7 @@ namespace Yo
             return result;
         }
 
-        public bool runSql(string sql) {
+        protected bool runSql(string sql) {
             var result = false;
             while (true) {
                 m_errorDict.Clear();
@@ -131,7 +131,7 @@ namespace Yo
             return result;
         }
 
-        public object getFirst(string sql) {
+        protected object getFirst(string sql) {
             object result = null;
             while (true) {
 

@@ -36,7 +36,7 @@ namespace Yo
             return result;
         }
 
-        public bool parseSqlValues(Dictionary<string, object> uiDict) {
+        bool parseSqlValues(Dictionary<string, object> uiDict) {
             bool result = false;
             while (true) {
                 m_uiDict = uiDict;

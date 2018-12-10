@@ -8,7 +8,7 @@ namespace Yo
     {
         public YoSelectOne(string table, object trans = null) : base(table, trans) { }
 
-        public object db2ui(object value, yo_column yoColumn) {
+        object db2ui(object value, yo_column yoColumn) {
             object result = value;
             switch (yoColumn._datatype) {
                 case DataType.Number:
@@ -40,12 +40,12 @@ namespace Yo
             return result;
         }
 
-        public string GetColumnDisplay(object value, yo_column yoColumn) {
+        protected string getColumnDisplay(object value, yo_column yoColumn) {
             string result = null;
             while (true) {
                 if (yoColumn._datatype == DataType.Refer) {
                     var select = new YoSelect(yoColumn._info as string);
-                    result = select.GetRowTitleDisplay(value);
+                    result = select.getRowTitleDisplay(value);
                     break;
                 }
 
@@ -60,7 +60,7 @@ namespace Yo
             return result;
         }
 
-        public string GetRowTitleDisplay(object id, bool isRow = false) {
+        protected string getRowTitleDisplay(object id, bool isRow = false) {
             string result = null;
             while (true) {
                 // get cache
@@ -88,7 +88,7 @@ namespace Yo
                     }
 
                     var yoColumn = m_yoColumnDict[field];
-                    var title = GetColumnDisplay(row[field], yoColumn);
+                    var title = getColumnDisplay(row[field], yoColumn);
                     titleList.Add(title);
                 }
 
@@ -117,7 +117,7 @@ namespace Yo
                 var key = yoColumn.column_name;
                 if (isModify) {
                     var value = m_dataRow[key];
-                    var displayValue = GetColumnDisplay(value, yoColumn);
+                    var displayValue = getColumnDisplay(value, yoColumn);
                     ui_column.column_value = new yo_column_value(value, displayValue);
                 }
                 uiColumnDict.Add(key, ui_column);

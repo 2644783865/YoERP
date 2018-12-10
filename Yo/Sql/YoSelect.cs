@@ -29,7 +29,7 @@ namespace Yo
                     displayTable.Rows.Add(rowNew);
 
                     YoSqlHelper.EachColumn(m_yoColumnDict, (key, yoColumn) => {
-                        rowNew[key] = GetColumnDisplay(row[key], yoColumn);
+                        rowNew[key] = getColumnDisplay(row[key], yoColumn);
                     });
                 }
 
@@ -54,7 +54,7 @@ namespace Yo
                     var rowNew = titleDisplayTable.NewRow();
                     titleDisplayTable.Rows.Add(rowNew);
                     rowNew[ID] = row[ID];
-                    rowNew[TITLE] = GetRowTitleDisplay(row, true);
+                    rowNew[TITLE] = getRowTitleDisplay(row, true);
                 }
 
                 break;

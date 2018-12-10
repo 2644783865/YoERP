@@ -18,7 +18,7 @@ namespace Yo
             return isChanged;
         }
 
-        public void ReferTables(object id) {
+        void referTables(object id) {
             var TABLENAME = "table_name";
             var sql = string.Format("SELECT {0} FROM information_schema.referential_constraints WHERE constraint_schema='{1}' and referenced_table_name='{2}';",
                                 TABLENAME, m_schema_table, m_table);
@@ -36,11 +36,11 @@ namespace Yo
                 if (!refer.CheckDisplayChange(sqlSetDict)) {
                     continue;
                 }
-                refer.ReferRows(key, id);
+                refer.referRows(key, id);
             }
         }
 
-        public void ReferRows(object key, object value) {
+        void referRows(object key, object value) {
             var sql = string.Format("SELECT {0} FROM `{1}` WHERE `{2}`='{3}'", ID, m_table, key, value);
             if (!fillData(sql)) {
                 return;
@@ -53,7 +53,7 @@ namespace Yo
 
         public void ReferRow(object id) {
             if (m_cache.Set(id, null)) {
-                ReferTables(id);
+                referTables(id);
             }
         }
     }

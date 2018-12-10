@@ -52,7 +52,7 @@ namespace Yo
             return result;
         }
 
-        public bool checkUptime() {
+        bool checkUptime() {
             bool result = false;
             while (true) {
                 if (!m_yoColumnDict.ContainsKey(UPTIME)) {
@@ -86,7 +86,7 @@ namespace Yo
             return result;
         }
 
-        public bool parseSqlSet() {
+        bool parseSqlSet() {
             bool result = false;
             while (true) {
                 if (m_uiDict == null) {

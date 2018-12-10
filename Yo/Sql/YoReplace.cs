@@ -10,7 +10,7 @@ namespace Yo
 
         public YoReplace(string table) : base(table) { }
 
-        public bool ui2db(ref object value, yo_column yoColumn) {
+        bool ui2db(ref object value, yo_column yoColumn) {
             var result = true;
             switch (yoColumn._datatype) {
                 case DataType.ID:
@@ -32,7 +32,7 @@ namespace Yo
             return result;
         }
 
-        public bool checkColumn(ref object value, Dictionary<string, object> uiDict, string key, yo_column yoColumn) {
+        protected bool checkColumn(ref object value, Dictionary<string, object> uiDict, string key, yo_column yoColumn) {
             bool result = false;
             while (true) {
                 if (key == ID) {
