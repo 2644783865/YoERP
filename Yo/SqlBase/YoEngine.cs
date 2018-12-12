@@ -1,14 +1,12 @@
 ﻿using MySql.Data.MySqlClient;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 
 namespace Yo
 {
-    public class YoEngine
+    public class YoEngine : YoBase
     {
         protected const string ID = "id";
-        protected const string DB = "db";
         protected const string CACHE = "_cache";
         protected const string TITLE = "title";
 
@@ -20,17 +18,14 @@ namespace Yo
         protected string m_connectionString;
         protected DataTable m_dataTable;
         protected DataRow m_dataRow;
-        protected Dictionary<string, object> m_errorDict;
 
         public DataTable DataTable { get { return m_dataTable; } }
         public DataRowCollection Rows { get { return (m_dataTable != null) ? m_dataTable.Rows : null; } }
         public DataView View { get { return (m_dataTable != null) ? m_dataTable.DefaultView : null; } }
         public DataRow Row { get { return m_dataRow; } }
-        public Dictionary<string, object> ErrorDict { get { return m_errorDict; } }
 
         public YoEngine() {
             LoadConfig(SCHEMA_TABLE);
-            m_errorDict = new Dictionary<string, object>();
         }
 
         public void LoadConfig(string schema_table, string yodata = YODATA) {

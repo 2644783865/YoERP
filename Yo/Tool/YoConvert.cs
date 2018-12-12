@@ -1,6 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Yo
 {
@@ -9,8 +12,8 @@ namespace Yo
         static public bool ToInt(ref object value) {
             bool result = true;
             while (true) {
-                if(value is string) {
-                    if(string.IsNullOrWhiteSpace(value as string)) {
+                if (value is string) {
+                    if (string.IsNullOrWhiteSpace(value as string)) {
                         value = 0;
                         break;
                     }
@@ -125,6 +128,54 @@ namespace Yo
                 catch { }
 
                 break;
+            }
+            return result;
+        }
+
+        static public string ToMD5(string str) {
+            if (string.IsNullOrEmpty(str)) {
+                return "";
+            }
+
+            MD5 md5 = new MD5CryptoServiceProvider();
+            var bytes = md5.ComputeHash(Encoding.UTF8.GetBytes(str));
+            var temp = new char[bytes.Length];
+            Array.Copy(bytes, temp, bytes.Length);
+            return new String(temp);
+        }
+
+        static public T Dict2Class<T>(Dictionary<string, object> dict) where T : class {
+            var type = typeof(T);
+            var obj = Activator.CreateInstance(type) as T;
+            var propertyList = type.GetProperties();
+            foreach (var property in propertyList) {
+                var name = property.Name;
+                var propertyType = property.PropertyType;
+                if (!dict.ContainsKey(name)) {
+                    continue;
+                }
+
+                var value = dict[name];
+                if (ToType(property.PropertyType, ref value)) {
+                    property.SetValue(obj, value);
+                }
+            }
+            return obj;
+        }
+
+        static public bool ToType(Type type, ref object value) {
+            var result = false;
+            if (type == typeof(int)) {
+                result = ToInt(ref value);
+            }
+            else if (type == typeof(string)) {
+                result = ToString(ref value);
+            }
+            else if (type == typeof(DateTime)) {
+                result = ToDatetime(ref value);
+            }
+            else if (type == typeof(double)) {
+                result = ToDouble(ref value);
             }
             return result;
         }
