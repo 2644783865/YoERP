@@ -22,7 +22,7 @@
                     continue;
                 }
 
-                (new TableLogic(sysTable.table_name)).DropTable();
+                (new TableLogic(sysTable.table_name)).RemoveTable();
             }
         }
 

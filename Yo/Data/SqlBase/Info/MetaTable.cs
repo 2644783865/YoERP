@@ -2,6 +2,8 @@
 {
     public class MetaTable : YoEngine
     {
+        const string table_comment = nameof(table_comment);
+
         sys_table m_sysTable;
         public sys_table SysTable { get { return m_sysTable; } }
 
@@ -41,8 +43,5 @@
             return result;
         }
 
-        public bool DropTable() {
-            return runSql("DROP TABLE " + m_table);
-        }
     }
 }

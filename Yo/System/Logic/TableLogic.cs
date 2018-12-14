@@ -47,6 +47,10 @@
                 result = (new TableModel()).ModifyRow(metaSysTable);
                 break;
             }
+
+            if (result) {
+                (new ColumnListLogic(m_tableModel.Row.id)).SyncColumnList();
+            }
             return result;
         }
 
@@ -126,7 +130,7 @@
             return result;
         }
 
-        public bool DropTable() {
+        public bool RemoveTable() {
             var result = false;
             while (true) {
                 if (!m_tableModel.HasRow) {
@@ -134,7 +138,6 @@
                 }
 
                 m_metaTitleTable.DropTable();
-                m_metaTable.DropTable();
                 m_tableModel.RemoveRow(m_tableModel.Row);
 
                 result = true;

@@ -7,7 +7,7 @@ namespace Yo
     public class YoEngine : YoBase
     {
         protected const string table_name = nameof(table_name);
-        protected const string table_comment = nameof(table_comment);
+        protected const string column_name = nameof(column_name);
         protected const string title_ = nameof(title_);
 
         protected const string ID = "id";
