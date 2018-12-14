@@ -7,6 +7,7 @@ namespace Yo
     {
         protected T m_row;
         public T Row { get { return m_row; } }
+        public bool HasRow { get { return m_row != null; } }
 
         protected JDb m_db;
         protected DbSet<T> m_dbset;

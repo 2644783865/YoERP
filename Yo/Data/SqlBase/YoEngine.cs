@@ -6,14 +6,18 @@ namespace Yo
 {
     public class YoEngine : YoBase
     {
+        protected const string table_name = nameof(table_name);
+        protected const string table_comment = nameof(table_comment);
+        protected const string title_ = nameof(title_);
+
         protected const string ID = "id";
-        protected const string CACHE = "_cache";
         protected const string TITLE = "title";
 
         protected const string SCHEMA_TABLE = "schema_table";
         protected const string CACHE_TABLE = "cache_table";
         protected const string YODATA = "yodata";
 
+        protected string m_table;
         protected string m_schema_table;
         protected string m_connectionString;
         protected DataTable m_dataTable;
@@ -24,7 +28,8 @@ namespace Yo
         public DataView View { get { return (m_dataTable != null) ? m_dataTable.DefaultView : null; } }
         public DataRow Row { get { return m_dataRow; } }
 
-        public YoEngine() {
+        public YoEngine(string table = null) {
+            m_table = table;
             LoadConfig(SCHEMA_TABLE);
         }
 

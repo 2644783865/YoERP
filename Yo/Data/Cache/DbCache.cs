@@ -5,7 +5,7 @@
         protected string m_tableCache;
 
         public DbCache(string table) {
-            m_tableCache = table + CACHE;
+            m_tableCache = title_ + table;
             LoadConfig(CACHE_TABLE);
         }
 

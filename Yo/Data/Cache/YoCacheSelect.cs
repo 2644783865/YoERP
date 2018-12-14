@@ -6,10 +6,10 @@
         int m_limit;
 
         public YoCacheSelect(string table, int limit = 10) {
-            m_tableCache = table + CACHE;
+            m_tableCache = title_ + table;
             m_limit = limit;
             LoadConfig(CACHE_TABLE);
-            (new YoCacheManage(table)).InitData();
+            (new TableLogic(table)).SyncTitle();
         }
 
         public bool Select() {

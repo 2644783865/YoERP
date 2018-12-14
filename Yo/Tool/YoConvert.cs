@@ -180,6 +180,22 @@ namespace Yo
             return result;
         }
 
+        static public List<string> ToList(string value, char split = ',') {
+            var result = new List<string>();
+            while (true) {
+                if (string.IsNullOrEmpty(value)) {
+                    break;
+                }
+
+                var items = value.Split(split);
+                foreach(var item in items) {
+                    result.Add(item.Trim());
+                }
+                break;
+            }
+            return result;
+        }
+
     }
 
 }

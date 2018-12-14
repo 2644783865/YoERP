@@ -7,7 +7,6 @@ namespace Yo
         protected const string UPTIME = "uptime";
         protected const string FORMAT = "format";
 
-        protected string m_table;
         protected object m_trans;
         protected Dictionary<string, yo_column> m_yoColumnDict;
         protected List<string> m_titleFields;
