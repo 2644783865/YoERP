@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -26,5 +27,12 @@ namespace Yo
         public string set { get; set; }
 
         public int sort { get; set; }
+
+        [NotMapped]
+        public string translation { get; set; }
+
+        [NotMapped]
+        public Dictionary<string, string> setDict { get; set; }
+
     }
 }

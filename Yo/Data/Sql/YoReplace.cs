@@ -10,9 +10,9 @@ namespace Yo
 
         public YoReplace(string table, object trans = null) : base(table, trans) { }
 
-        bool ui2db(ref object value, yo_column yoColumn) {
+        bool ui2db(ref object value, sys_column yoColumn) {
             var result = true;
-            switch (yoColumn._datatype) {
+            switch (yoColumn.datatype) {
                 case DataType.ID:
                 case DataType.Refer:
                     result = YoConvert.ToInt(ref value);
@@ -32,7 +32,7 @@ namespace Yo
             return result;
         }
 
-        protected bool checkColumn(ref object value, Dictionary<string, object> uiDict, string key, yo_column yoColumn) {
+        protected bool checkColumn(ref object value, Dictionary<string, object> uiDict, string key, sys_column yoColumn) {
             bool result = false;
             while (true) {
                 if (key == ID) {
@@ -43,7 +43,7 @@ namespace Yo
                     break;
                 }
 
-                if (yoColumn._datatype == DataType.Calc) {
+                if (yoColumn.datatype == DataType.Calc) {
                     break;
                 }
 

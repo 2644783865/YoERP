@@ -16,7 +16,7 @@ namespace Yo
             }
         }
 
-        static public void EachColumn(Dictionary<string, yo_column> columnDict, Action<string, yo_column> act) {
+        static public void EachColumn<T>(Dictionary<string, T> columnDict, Action<string, T> act) {
             if (act == null || columnDict == null || columnDict.Count == 0) {
                 return;
             }
@@ -24,48 +24,6 @@ namespace Yo
             foreach (var item in columnDict) {
                 act(item.Key, item.Value);
             }
-        }
-
-        static public Dictionary<string, T> Datatable2Dict<T>(DataTable dt, string key, Func<string, T, object> func = null) {
-            var dict = new Dictionary<string, T>();
-            while (true) {
-                if(dt == null || dt.Rows.Count == 0) {
-                    break;
-                }
-
-                var type = typeof(T);
-                var keyProperty = type.GetProperty(key);
-                if (keyProperty == null || keyProperty.PropertyType != typeof(string)) {
-                    break;
-                }
-
-                var propertyList = type.GetProperties();
-                foreach (DataRow row in dt.Rows) {
-                    var item = (T)Activator.CreateInstance(type, null);
-
-                    foreach (var property in propertyList) {
-                        var name = property.Name;
-                        object value = null;
-
-                        if (name.StartsWith("_")) {
-                            if (func == null) {
-                                continue;
-                            }
-                            value = func(name, item);
-                        }
-                        else {
-                            value = row[name];
-                        }
-                        property.SetValue(item, value);
-
-                        if (name == key) {
-                            dict.Add(row[name].ToString(), item);
-                        }
-                    }
-                }
-                break;
-            }
-            return dict;
         }
 
         static public string GetReferTable(string key) {

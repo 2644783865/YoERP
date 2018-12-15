@@ -23,18 +23,16 @@ namespace Yo
         }
 
         void referTables(object id) {
-            var TABLENAME = "table_name";
-            var sql = string.Format("SELECT {0} FROM information_schema.referential_constraints WHERE constraint_schema='{1}' and referenced_table_name='{2}';",
-                                TABLENAME, m_schema_table, m_table);
-            if (!fillData(sql)) {
+            if(m_sysTable == null || m_sysTable.refer == null) {
                 return;
             }
 
             var key = m_table + "_" + ID;
             var sqlSetDict = new Dictionary<string, string>();
             sqlSetDict.Add(key, null);
-            foreach (DataRow row in m_dataTable.Rows) {
-                var table = row[TABLENAME].ToString();
+
+            var tableList = YoConvert.ToList(m_sysTable.refer);
+            foreach (var table in tableList) {
                 var refer = new YoCacheRefer(table, m_act);
 
                 if (!refer.CheckDisplayChange(sqlSetDict)) {

@@ -163,6 +163,37 @@ namespace Yo
             return obj;
         }
 
+        static public Dictionary<string, T> List2Dict<T>(List<T> objList, string name, Func<T, T> func = null) where T : class {
+            var dict = new Dictionary<string, T>();
+            while (true) {
+                if (objList == null) {
+                    break;
+                }
+
+                var type = typeof(T);
+                var property = type.GetProperty(name);
+                if(property == null) {
+                    break;
+                }
+
+                for (var i = 0; i < objList.Count; ++i) {
+                    var obj = objList[i];
+                    var key = property.GetValue(obj);
+                    if (key == null) {
+                        continue;
+                    }
+                    
+                    if(func != null) {
+                        obj = func(obj);
+                    }
+                    dict.Add(key.ToString(), obj);
+                }
+
+                break;
+            }
+            return dict;
+        }
+
         static public bool ToType(Type type, ref object value) {
             var result = false;
             if (type == typeof(int)) {

@@ -21,6 +21,6 @@ namespace Yo
         public string refer { get; set; }
 
         [NotMapped]
-        public string tranlation { get; set; }
+        public string translation { get; set; }
     }
 }

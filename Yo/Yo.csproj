@@ -84,17 +84,14 @@
     <Compile Include="Tool\FileHelper.cs" />
     <Compile Include="Data\SqlBase\Metadata\yo_column_ui.cs" />
     <Compile Include="Data\SqlBase\Metadata\yo_table.cs" />
-    <Compile Include="Data\SqlBase\Metadata\yo_column.cs" />
     <Compile Include="Data\SqlBase\Metadata\DataType.cs" />
     <Compile Include="Data\SqlBase\Metadata\yo_column_value.cs" />
-    <Compile Include="Data\SqlBase\Info\YoColumnInfo.cs" />
     <Compile Include="Data\SqlBase\YoSQL.cs" />
     <Compile Include="Data\Sql\YoInsert.cs" />
     <Compile Include="Data\Sql\YoSelectOne.cs" />
     <Compile Include="Data\Sql\YoReplace.cs" />
     <Compile Include="Data\Sql\YoUpdate.cs" />
     <Compile Include="Data\Sql\YoSelect.cs" />
-    <Compile Include="Data\SqlBase\Info\YoTableInfo.cs" />
     <Compile Include="Data\SqlBase\YoEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tool\ConfigHelper.cs" />
@@ -116,8 +113,8 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagramSys.cd" />
+    <None Include="ClassDiagramData.cd" />
+    <None Include="ClassDiagramSystem.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

@@ -25,6 +25,13 @@
                     break;
                 }
 
+                if(m_metaTable.SysTable.title == null) {
+                    var columns = (new MetaColumnList(m_table)).GetColumns();
+                    if(columns.Count > 1) {
+                        m_metaTable.SysTable.title = columns[1];
+                    }
+                }
+
                 if (!m_metaTitleTable.HasTable()) {
                     m_metaTitleTable.CreateTable();
                 }
@@ -137,8 +144,13 @@
                     break;
                 }
 
-                m_metaTitleTable.DropTable();
+                var tableId = m_tableModel.Row.id;
+                var sysColumnList = (new ColumnModel()).GetList(tableId);
+                foreach(var sysColumn in sysColumnList) {
+                    (new ColumnLogic(tableId, sysColumn.column_name)).RemoveColumn();
+                }
                 m_tableModel.RemoveRow(m_tableModel.Row);
+                m_metaTitleTable.DropTable();
 
                 result = true;
                 break;

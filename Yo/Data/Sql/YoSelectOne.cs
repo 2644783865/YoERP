@@ -8,31 +8,27 @@ namespace Yo
     {
         public YoSelectOne(string table, object trans = null) : base(table, trans) { }
 
-        object db2ui(object value, yo_column yoColumn) {
+        object db2ui(object value, sys_column yoColumn) {
             object result = value;
-            switch (yoColumn._datatype) {
+            switch (yoColumn.datatype) {
                 case DataType.Number:
                 case DataType.Calc: {
-                        var format = ConfigHelper.GetValue(yoColumn._comment, FORMAT);
-                        if (format != null) {
-                            var formatStr = "{0:F" + format + "}";
-                            result = string.Format(formatStr, value);
+                        object format = yoColumn.format;
+                        if (format != null && YoConvert.ToInt(ref format)) {
+                            result = string.Format("{0:F" + format + "}", value);
                         }
                     }
                     break;
-                case DataType.Datetime: {
-                        var format = ConfigHelper.GetValue(yoColumn._comment, FORMAT);
-                        if (format != null) {
-                            result = Convert.ToDateTime(value).ToShortDateString();
-                        }
+                case DataType.Datetime:
+                    if (yoColumn.format != null && YoConvert.ToDatetime(ref value)) {
+                        result = ((DateTime)value).ToShortDateString();
                     }
                     break;
                 case DataType.Set:
-                    if (value != null && yoColumn._info is Dictionary<string, string>) {
+                    if (value != null && yoColumn.setDict != null) {
                         var setKey = value.ToString();
-                        var setDict = yoColumn._info as Dictionary<string, string>;
-                        if (setDict.ContainsKey(setKey)) {
-                            result = setDict[setKey];
+                        if (yoColumn.setDict.ContainsKey(setKey)) {
+                            result = yoColumn.setDict[setKey];
                         }
                     }
                     break;
@@ -40,11 +36,11 @@ namespace Yo
             return result;
         }
 
-        protected string getColumnDisplay(object value, yo_column yoColumn) {
+        protected string getColumnDisplay(object value, sys_column yoColumn) {
             string result = null;
             while (true) {
-                if (yoColumn._datatype == DataType.Refer) {
-                    var select = new YoSelect(yoColumn._info as string);
+                if (yoColumn.datatype == DataType.Refer) {
+                    var select = new YoSelect(yoColumn.refer as string);
                     result = select.GetRowTitleDisplay(value);
                     break;
                 }
