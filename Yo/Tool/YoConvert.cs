@@ -9,6 +9,28 @@ namespace Yo
 {
     public class YoConvert
     {
+        static public bool ToBool(ref object value) {
+            bool result = true;
+            while (true) {
+                if (value is string) {
+                    if (string.IsNullOrWhiteSpace(value as string)) {
+                        value = false;
+                        break;
+                    }
+                }
+
+                try {
+                    value = Convert.ToBoolean(value);
+                }
+                catch {
+                    result = false;
+                }
+
+                break;
+            }
+            return result;
+        }
+
         static public bool ToInt(ref object value) {
             bool result = true;
             while (true) {

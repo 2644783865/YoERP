@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Yo
 {
@@ -11,20 +12,20 @@ namespace Yo
 
         public YoInsert(string table, object trans = null) : base(table, trans) { }
 
-        public bool Insert(Dictionary<string, object> dict) {
+        public bool Insert(JObject uiDict) {
             var result = false;
             while (true) {
                 m_id = null;
-
-                if (dict == null) {
-                    break;
-                }
-                
-                if (dict.Count <= 0) {
+                m_uiDict = uiDict;
+                if (m_uiDict == null) {
                     break;
                 }
 
-                if (!parseSqlValues(dict)) {
+                if (m_uiDict.Count <= 0) {
+                    break;
+                }
+
+                if (!parseSqlValues()) {
                     break;
                 }
 
@@ -46,14 +47,9 @@ namespace Yo
             return result;
         }
 
-        bool parseSqlValues(Dictionary<string, object> uiDict) {
+        bool parseSqlValues() {
             bool result = false;
             while (true) {
-                m_uiDict = uiDict;
-                if (m_uiDict == null) {
-                    break;
-                }
-
                 m_errorDict = new Dictionary<string, object>();
                 m_listSqlColumn = new List<string>();
                 m_listSqlValue = new List<string>();

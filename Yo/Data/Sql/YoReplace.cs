@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Yo
 {
     public class YoReplace : YoSQL
     {
-        protected Dictionary<string, object> m_uiDict;
+        protected JObject m_uiDict;
 
-        public Dictionary<string, object> UiDict { set { m_uiDict = value; } }
+        public JObject UiDict { set { m_uiDict = value; } }
 
         public YoReplace(string table, object trans = null) : base(table, trans) { }
 
@@ -32,7 +33,7 @@ namespace Yo
             return result;
         }
 
-        protected bool checkColumn(ref object value, Dictionary<string, object> uiDict, string key, sys_column yoColumn) {
+        protected bool checkColumn(ref object value, JObject uiDict, string key, sys_column yoColumn) {
             bool result = false;
             while (true) {
                 if (key == ID) {

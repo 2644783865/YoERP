@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace Yo
@@ -9,7 +10,7 @@ namespace Yo
 
         public YoUpdate(string table, object trans = null) : base(table, trans) { }
 
-        public bool Update(Dictionary<string, object> uiDict) {
+        public bool Update(JObject uiDict) {
             var result = false;
             while (true) {
                 m_uiDict = uiDict;
@@ -69,7 +70,7 @@ namespace Yo
                     break;
                 }
 
-                var uiUptime = m_uiDict[UPTIME];
+                object uiUptime = m_uiDict[UPTIME];
                 if (!YoConvert.ToDatetime(ref uiUptime)) {
                     break;
                 }
